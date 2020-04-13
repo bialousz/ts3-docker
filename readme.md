@@ -2,7 +2,7 @@
 > Docker based TS 3 server setup with 2 servers running on one host on different ports with NGINX reverse proxy with load balancing
 
 ## Overview 
-** THIS PROJECT IS NOT PRODUCTION READY**
+**THIS PROJECT IS NOT PRODUCTION READY**
 
 This project is experimental setup for solving issue of setting two TS3 servers with NGINX reverse procy and load balancing. 
 
