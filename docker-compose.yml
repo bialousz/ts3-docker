@@ -1,0 +1,113 @@
+version: '3.1'
+services:
+    nginx:
+        image: nginx
+        ports:
+            - 9987:9987/udp
+            # - 10987:10987/udp
+        volumes:
+            - ./config/nginx/conf.d/:/etc/nginx/conf.d/
+            - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
+        networks: 
+            - ts-network
+    ts1:
+        image: teamspeak
+        # restart: always
+        ports:
+          - 9987/udp
+        #   - 10011:10011
+        #   - 30033:30033
+        environment:
+            TS3SERVER_DB_PLUGIN: ts3db_mariadb
+            TS3SERVER_DB_SQLCREATEPATH: create_mariadb
+            TS3SERVER_DB_HOST: db1
+            TS3SERVER_DB_USER: root
+            TS3SERVER_DB_PASSWORD: example
+            TS3SERVER_DB_NAME: teamspeak
+            TS3SERVER_DB_WAITUNTILREADY: 30
+            TS3SERVER_LICENSE: accept
+        networks: 
+            - ts-network
+
+    # ts2:
+    #     image: teamspeak
+    #     # restart: always
+    #     ports:
+    #         - 9987/udp
+    #     #     - 10011:10011
+    #     #     - 30033:30033
+    #     environment:
+    #         TS3SERVER_DB_PLUGIN: ts3db_mariadb
+    #         # TS3SERVER_DB_SQLCREATEPATH: create_mariadb
+    #         TS3SERVER_DB_HOST: db1
+    #         TS3SERVER_DB_USER: root
+    #         TS3SERVER_DB_PASSWORD: example
+    #         TS3SERVER_DB_NAME: teamspeak
+    #         TS3SERVER_DB_WAITUNTILREADY: 30
+    #         TS3SERVER_LICENSE: accept
+    #     networks: 
+    #         - ts-network
+
+    db1:
+        image: mariadb
+        volumes: 
+            - ./data/db1:/var/lib/mysql
+        # restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: example
+            MYSQL_DATABASE: teamspeak
+        networks: 
+            - ts-network  
+    
+    # ts3:
+    #     image: teamspeak
+    #     # restart: always
+    #     ports:
+    #       - 9987/udp
+    #     #   - 10011:10011
+    #     #   - 30033:30033
+    #     environment:
+    #         TS3SERVER_DB_PLUGIN: ts3db_mariadb
+    #         TS3SERVER_DB_SQLCREATEPATH: create_mariadb
+    #         TS3SERVER_DB_HOST: db2
+    #         TS3SERVER_DB_USER: root
+    #         TS3SERVER_DB_PASSWORD: example
+    #         TS3SERVER_DB_NAME: teamspeak
+    #         TS3SERVER_DB_WAITUNTILREADY: 30
+    #         TS3SERVER_LICENSE: accept
+    #     networks: 
+    #         - ts-network
+
+    # ts4:
+    #     image: teamspeak
+    #     # restart: always
+    #     # ports:
+    #     #     - 9987:9987/udp
+    #     #     - 10011:10011
+    #     #     - 30033:30033
+    #     environment:
+    #         TS3SERVER_DB_PLUGIN: ts3db_mariadb
+    #         # TS3SERVER_DB_SQLCREATEPATH: create_mariadb
+    #         TS3SERVER_DB_HOST: db2
+    #         TS3SERVER_DB_USER: root
+    #         TS3SERVER_DB_PASSWORD: example
+    #         TS3SERVER_DB_NAME: teamspeak
+    #         TS3SERVER_DB_WAITUNTILREADY: 30
+    #         TS3SERVER_LICENSE: accept
+    #     networks: 
+    #         - ts-network
+
+    # db2:
+    #     image: mariadb
+    #     # restart: always
+    #     volumes: 
+    #         - ./data/db2:/var/lib/mysql
+    #     environment:
+    #         MYSQL_ROOT_PASSWORD: example
+    #         MYSQL_DATABASE: teamspeak
+    #     networks: 
+    #         - ts-network          
+        
+networks:
+    ts-network:
+        driver: bridge
